@@ -19,7 +19,6 @@ const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
   };
 
   return (
-    // padding 16
     <View style={[styles.container, { padding: 16 }]}>
       <Image source={require('../../assets/mascot.png')} style={styles.logo} />
 
