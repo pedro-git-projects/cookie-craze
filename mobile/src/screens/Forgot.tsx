@@ -1,15 +1,11 @@
 import { useState } from 'react';
-import {
-  Dimensions,
-  Image,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import styles from '../styles/global';
+import { SetupStackScreenProps } from '../navigation/types';
 
-export default function ForgotScreen({ navigation }) {
+const ForgotScreen: React.FC<SetupStackScreenProps<'Forgot'>> = ({
+  navigation,
+}) => {
   const [email, setEmail] = useState(''); // State for the email
 
   const handleSendEmail = () => {
@@ -38,4 +34,6 @@ export default function ForgotScreen({ navigation }) {
       </TouchableOpacity>
     </View>
   );
-}
+};
+
+export default ForgotScreen;

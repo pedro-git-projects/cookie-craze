@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Image, TextInput, Text, TouchableOpacity, View } from 'react-native';
 import NavigableText from '../components/NavigableText';
 import styles from '../styles/global';
+import { SetupStackScreenProps } from '../navigation/types';
 
-export default function LoginScreen({ navigation }) {
+const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
+  navigation,
+}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
@@ -61,4 +64,6 @@ export default function LoginScreen({ navigation }) {
       </View>
     </View>
   );
-}
+};
+
+export default LoginScreen;
