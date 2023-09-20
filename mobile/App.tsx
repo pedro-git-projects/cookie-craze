@@ -1,20 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import SetupNavigation from './src/navigation/SetupNavigation';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  useEffect(() => {
+    // Check if the user is authenticated, and update setIsAuthenticated accordingly
+    // For example, you can use AsyncStorage, a token check, or any other method.
+    // Once you determine authentication, update setIsAuthenticated(true);
+  }, []);
+
+  if (!isAuthenticated) {
+    return <SetupNavigation />;
+  }
+}
