@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SetupStackParamList } from '../navigation/types';
 import { StackScreenProps } from '@react-navigation/stack';
+import styles from '../styles/global';
 
 type SplashScreenProps = StackScreenProps<SetupStackParamList, 'Splash'>;
 
@@ -28,7 +29,9 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.logoContainer, { opacity: logoOpacity }]}>
+      <Animated.View
+        style={[splashStyles.logoContainer, { opacity: logoOpacity }]}
+      >
         <Image
           source={require('../../assets/splash.png')}
           style={{
@@ -42,13 +45,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#282828',
-  },
+const splashStyles = StyleSheet.create({
   logoContainer: {
     alignItems: 'center',
   },
