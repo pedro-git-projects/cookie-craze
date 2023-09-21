@@ -1,11 +1,8 @@
-import React from 'react'
+import React from 'react';
+import Login from './pages/Login';
 
 const App: React.FC = () => {
-    return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-    )
-}
+  return <Login></Login>;
+};
 
-export default App
+export default App;
