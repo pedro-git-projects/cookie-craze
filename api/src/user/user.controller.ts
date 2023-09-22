@@ -1,14 +1,29 @@
-import { Controller, Get,  UseGuards } from '@nestjs/common';
+import { Body, Controller, Get,  UseGuards, Patch } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
+import { UpdateScoreDto } from './dto/update-score.dto';
+import { UserService } from './user.service';
 
 @Controller('users')
 @UseGuards(JwtGuard)
 export class UserController {
+  constructor(private userService: UserService) {}
+
   @Get('self')
   getMe(@GetUser() user: User) {
     const {id, createdat, updatedAt, ...rest} = user
     return rest;
+  }
+
+  @Patch('score')
+  async updateScore(
+      @GetUser() user:User,
+      @Body() updateScoreDto: UpdateScoreDto
+  ): Promise<User> {
+      const updatedUser = await this.userService.updateUserScore(
+          user.id, updateScoreDto.score
+      )
+      return updatedUser;
   }
 }
