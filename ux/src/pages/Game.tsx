@@ -6,13 +6,13 @@ import { useAuth } from '../state/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
 const Game: React.FC = () => {
-  const [score, setScore] = useState<number | null>(null); 
+  const [score, setScore] = useState<number | null>(null);
   const { accessToken } = useAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!accessToken) {
-        navigate("/")
+      navigate('/');
     } else {
       axios
         .get('http://localhost:3000/users/self', {
@@ -37,7 +37,7 @@ const Game: React.FC = () => {
 
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      {score !== null ? ( 
+      {score !== null ? (
         <div className="text-center">
           <div className="text-4xl mb-4">Cookies: {score}</div>
           <img
