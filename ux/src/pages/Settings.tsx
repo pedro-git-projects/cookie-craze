@@ -62,24 +62,24 @@ const Settings: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div className="bg-white p-6 rounded-lg shadow-lg text-center">
         {userData ? (
           <>
             <div className="text-xl font-semibold">
-              {'Username: ' + userData.email}
+              {'Usuário: ' + userData.email}
             </div>
             <div className="text-xl font-semibold">
-              {'🍪 Score:' + userData.score + ' 🍪'}
+              {'🍪 Pontuação:' + userData.score + ' 🍪'}
             </div>
             <button
               onClick={handleDeleteUser}
-              className="bg-red-500 text-white px-2 py-1 rounded-lg mt-4 hover:bg-red-600"
+              className=" bg-red-500 text-white px-2 py-1 rounded-lg mt-4 hover:bg-red-600"
             >
-              Delete User
+            Deletar Conta 
             </button>
           </>
         ) : (
-          <p>Loading user data...</p>
+          <p>Carregando dados...</p>
         )}
       </div>
 
@@ -88,20 +88,20 @@ const Settings: React.FC = () => {
           <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
           <div className="bg-white p-6 rounded-lg shadow-lg z-10">
             <p className="text-xl mb-4">
-              Are you sure you want to delete this user?
+              Tem certeza que quer excluir sua conta?
             </p>
             <div className="flex justify-end">
               <button
                 onClick={handleCloseModal}
                 className="bg-gray-300 text-gray-800 px-3 py-1 rounded-lg mr-2 hover:bg-gray-400"
               >
-                Cancel
+                Cancelar
               </button>
               <button
                 onClick={handleConfirmDelete}
                 className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600"
               >
-                Confirm
+                Confirmar
               </button>
             </div>
           </div>

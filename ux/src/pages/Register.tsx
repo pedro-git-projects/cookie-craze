@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
@@ -15,7 +17,8 @@ const Register: React.FC = () => {
       const { access_token } = response.data;
       console.log(access_token);
 
-      alert('Registered successfully');
+      alert('Cadastrado com sucesso!');
+      navigate('/');
     } catch (err) {
       console.log(err);
       alert('Registration failed. Please try again.');

@@ -40,7 +40,7 @@ const Leaderboard: React.FC = () => {
   }, []);
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Leaderboard</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">Placar</h1>
       {isLoading ? (
         <div className="bg-white p-4 shadow rounded-lg animate-pulse">
           <div className="h-8 bg-gray-200 rounded w-full mb-2"></div>
@@ -57,8 +57,9 @@ const Leaderboard: React.FC = () => {
               className="flex justify-between items-center p-2 border-b"
             >
               <div>
-                <span className="text-lg font-semibold">{entry.email}</span>
-                <span className="text-gray-500"> - Score: {entry.score}</span>
+                <span className="text-lg font-semibold">{"Usuário: " + entry.email}</span>
+                <br/>
+                <span className="text-lg font-semibold">{"Pontuação: " + entry.score + " 🍪"}</span>
               </div>
             </li>
           ))}
