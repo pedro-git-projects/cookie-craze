@@ -9,12 +9,11 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-  // TODO: Fix axios network error
-  // ref: https://github.com/axios/axios/issues/5366
   const handleRegister = async () => {
     try {
-      const res = await axios.post('http://localhost:3000/auth/signup', {
+      const res = await axios.post(`http://${ip}:3000/auth/signup`, {
         email,
         password,
       });
