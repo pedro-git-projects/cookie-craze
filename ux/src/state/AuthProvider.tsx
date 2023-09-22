@@ -29,13 +29,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const login = (token: string) => {
     setAccessToken(token);
-    console.log('logged..');
+    console.log('logged...');
     localStorage.setItem('accessToken', token);
   };
 
   const logout = () => {
     setAccessToken(null);
-    // Remove the token from localStorage
     localStorage.removeItem('accessToken');
   };
 

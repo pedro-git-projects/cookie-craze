@@ -3,9 +3,11 @@ import logo from '../assets/mascot.png';
 import NavigableText from '../components/NavigableText';
 import axios from 'axios';
 import { useAuth } from '../state/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
@@ -19,6 +21,7 @@ const Login: React.FC = () => {
 
       const { access_token } = response.data;
       login(access_token);
+      navigate("/game")
 
       setEmail('');
       setPassword('');
