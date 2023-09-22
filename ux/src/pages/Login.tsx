@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import logo from '../assets/mascot.png';
 import NavigableText from '../components/NavigableText';
 import axios from 'axios';
+import { useAuth } from '../state/AuthProvider';
 
 const Login: React.FC = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
@@ -16,7 +18,7 @@ const Login: React.FC = () => {
       });
 
       const { access_token } = response.data;
-      console.log('Access Token:', access_token);
+      login(access_token);
 
       setEmail('');
       setPassword('');
