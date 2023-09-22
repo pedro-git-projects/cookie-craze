@@ -75,7 +75,7 @@ const Settings: React.FC = () => {
               onClick={handleDeleteUser}
               className=" bg-red-500 text-white px-2 py-1 rounded-lg mt-4 hover:bg-red-600"
             >
-            Deletar Conta 
+              Deletar Conta
             </button>
           </>
         ) : (

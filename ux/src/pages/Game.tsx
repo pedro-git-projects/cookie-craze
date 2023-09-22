@@ -10,6 +10,26 @@ const Game: React.FC = () => {
   const { accessToken } = useAuth();
   const navigate = useNavigate();
 
+  const saveScore = (newScore: number) => {
+    if (!accessToken) return;
+    axios
+      .patch(
+        'http://localhost:3000/users/score',
+        { score: newScore },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      )
+      .then(() => {
+        console.log('Score saved successfully');
+      })
+      .catch((error) => {
+        console.error('Error saving score:', error);
+      });
+  };
+
   useEffect(() => {
     if (!accessToken) {
       navigate('/');
@@ -27,11 +47,39 @@ const Game: React.FC = () => {
           console.error('Error fetching initial score:', error);
         });
     }
-  }, [accessToken]);
+  }, [accessToken, navigate]);
+
+  useEffect(() => {
+    // Save the score every 10 minutes
+    const saveScoreInterval = setInterval(
+      () => {
+        if (score !== null) {
+          saveScore(score);
+        }
+      },
+      10 * 60 * 1000,
+    ); // 10 minutes in milliseconds
+
+    // Save the score before navigating away or quitting the page
+    const handleBeforeUnload = () => {
+      if (score !== null) {
+        saveScore(score);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      clearInterval(saveScoreInterval);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [score]);
 
   const handleClick = (x: number) => {
     if (score !== null) {
-      setScore(score + x);
+      const newScore = score + x;
+      setScore(newScore);
+      saveScore(newScore); // Save the score when the user clicks
     }
   };
 

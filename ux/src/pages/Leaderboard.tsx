@@ -57,9 +57,13 @@ const Leaderboard: React.FC = () => {
               className="flex justify-between items-center p-2 border-b"
             >
               <div>
-                <span className="text-lg font-semibold">{"Usuário: " + entry.email}</span>
-                <br/>
-                <span className="text-lg font-semibold">{"Pontuação: " + entry.score + " 🍪"}</span>
+                <span className="text-lg font-semibold">
+                  {'Usuário: ' + entry.email}
+                </span>
+                <br />
+                <span className="text-lg font-semibold">
+                  {'Pontuação: ' + entry.score + ' 🍪'}
+                </span>
               </div>
             </li>
           ))}
