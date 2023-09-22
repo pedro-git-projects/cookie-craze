@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { DbService } from 'src/db/db.service';
 import { LeaderboardEntry } from './entity/leaderboard-entry.entity';
@@ -28,5 +28,21 @@ export class UserService {
     });
 
     return leaderboard;
+  }
+
+  async deleteUser(userId: number): Promise<User> {
+    const userToDelete = await this.db.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userToDelete) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    const deletedUser = await this.db.user.delete({
+      where: { id: userId },
+    });
+
+    return deletedUser;
   }
 }

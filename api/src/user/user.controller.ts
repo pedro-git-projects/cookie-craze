@@ -1,4 +1,11 @@
-import { Body, Controller, Get, UseGuards, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  UseGuards,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
@@ -33,5 +40,11 @@ export class UserController {
   async getLeaderboard(): Promise<LeaderboardEntry[]> {
     const leaderboard = await this.userService.getLeaderboard();
     return leaderboard;
+  }
+
+  @Delete('self')
+  async deleteUser(@GetUser() userToDelete: User): Promise<User> {
+    const deletedUser = await this.userService.deleteUser(userToDelete.id);
+    return deletedUser;
   }
 }
