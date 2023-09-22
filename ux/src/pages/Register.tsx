@@ -1,11 +1,26 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // TODO actually implement the handler
-  const handleRegister = () => 'Registered!';
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/auth/signup', {
+        email,
+        password,
+      });
+
+      const { access_token } = response.data;
+      console.log(access_token);
+
+      alert('Registered successfully');
+    } catch (err) {
+      console.log(err);
+      alert('Registration failed. Please try again.');
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
