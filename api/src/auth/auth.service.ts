@@ -14,7 +14,7 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async signup(dto: AuthDto): Promise<{access_token: string}| never> {
+  async signup(dto: AuthDto): Promise<{ access_token: string } | never> {
     const hash = await argon.hash(dto.password);
 
     try {
@@ -55,11 +55,13 @@ export class AuthService {
       throw new ForbiddenException('incorrect credentials');
     }
 
-    delete user.hash;
-    return user;
+    return this.signToken(user.id, user.email);
   }
 
-async  signToken(userID: number, email: string): Promise<{access_token:string}> {
+  async signToken(
+    userID: number,
+    email: string,
+  ): Promise<{ access_token: string }> {
     const payload = {
       sub: userID,
       email,
@@ -69,8 +71,8 @@ async  signToken(userID: number, email: string): Promise<{access_token:string}> 
       expiresIn: '15m',
       secret: this.config.get('JWT_SECRET'),
     });
-
-    return {access_token: token}
+    return {
+      access_token: token,
+    };
   }
-
 }
