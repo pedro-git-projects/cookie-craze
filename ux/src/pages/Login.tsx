@@ -21,7 +21,7 @@ const Login: React.FC = () => {
 
       const { access_token } = response.data;
       login(access_token);
-      navigate("/game")
+      navigate('/game');
 
       setEmail('');
       setPassword('');
