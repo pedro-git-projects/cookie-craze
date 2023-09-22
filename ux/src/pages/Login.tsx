@@ -1,17 +1,30 @@
 import React, { useState } from 'react';
 import logo from '../assets/mascot.png';
 import NavigableText from '../components/NavigableText';
+import axios from 'axios';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
 
-  const handleLogin = () => {
-    // TODO: handle login
-    setLoginFailed(true);
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/auth/signin', {
+        email,
+        password,
+      });
+
+      const { access_token } = response.data;
+      console.log('Access Token:', access_token);
+
+      setEmail('');
+      setPassword('');
+      setLoginFailed(false);
+    } catch (error) {
+      console.error('Login failed:', error);
+      setLoginFailed(true);
+    }
   };
 
   return (
