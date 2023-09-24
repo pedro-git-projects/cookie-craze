@@ -50,31 +50,46 @@ const LeaderboardScreen: React.FC<MainTabsScreenProps<'Leaderboad'>> = ({
     <View style={styles.leaderboardItem}>
       <Text style={styles.rank}>{index + 1}</Text>
       <Text style={styles.username}>{item.email}</Text>
-      <Text style={styles.score}>{item.score + "🍪"}</Text>
+      <Text style={styles.score}>{item.score + '🍪'}</Text>
     </View>
   );
 
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
   return (
-    <View style={styles.container}>
-      {isLoading ? (
-        <Text>Loading...</Text>
-      ) : (
+    <>
+      <View style={styles.container}>
+        <Text style={styles.titleText}>🏆 Placar 🏆</Text>
+      </View>
+      <View style={styles.flatList}>
         <FlatList
           data={leaderboardData}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderLeaderboardItems}
-          style={styles.container}
+          style={styles.flatList}
         />
-      )}
-    </View>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
     padding: 16,
     backgroundColor: '#282828',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  flatList: {
+    padding: 16,
+    backgroundColor: '#282828',
+  },
+  titleText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
   },
   leaderboardItem: {
     flexDirection: 'row',

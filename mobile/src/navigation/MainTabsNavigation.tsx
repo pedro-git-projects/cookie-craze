@@ -11,7 +11,16 @@ const MainTabs = createBottomTabNavigator<MainTabsParamList>();
 
 export default function MainTabsNavigation() {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={{
+        colors: {
+          primary: '#ebdbb2',
+          background: '#282828',
+          card: '#1d2021',
+          text: '#ebdbb2',
+        },
+      }}
+    >
       <MainTabs.Navigator initialRouteName="Game">
         <MainTabs.Screen
           name="Game"
