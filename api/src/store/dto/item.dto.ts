@@ -10,4 +10,8 @@ export class ItemDto {
   @IsNotEmpty()
   @IsNumber()
   scoreModifier: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
 }

@@ -7,6 +7,7 @@ import {
   Delete,
   Param,
   Post,
+  HttpStatus,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { GetUser } from 'src/auth/decorator';
@@ -52,18 +53,34 @@ export class UserController {
   }
 
   @Post('purchase')
-  async purchaseItem(@GetUser() user: User ,@Body() purchaseDto: PurchaseDto): Promise<void> {
+  async purchaseItem(
+    @GetUser() user: User,
+    @Body() purchaseDto: PurchaseDto,
+  ): Promise<any> {
     const { itemId } = purchaseDto;
-    await this.userService.purchaseItem(user.id, itemId);
+
+    try {
+      await this.userService.purchaseItem(user.id, itemId);
+      // Purchase successful
+      return {
+        message: 'Purchase successful',
+        status: HttpStatus.OK,
+      };
+    } catch (error) {
+      return {
+        message: error.message,
+        status: HttpStatus.BAD_REQUEST,
+      };
+    }
   }
 
   @Get('items')
   async getUserItems(@GetUser() user: User) {
-      return this.userService.getUserItems(user.id);
+    return this.userService.getUserItems(user.id);
   }
 
-   @Get('items/greatest')
+  @Get('items/greatest')
   async getUserGreatestItem(@GetUser() user: User) {
-      return this.userService.getUserItemWithGreatestScoreModifier(user.id);
+    return this.userService.getUserItemWithGreatestScoreModifier(user.id);
   }
 }

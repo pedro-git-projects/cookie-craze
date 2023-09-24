@@ -28,6 +28,7 @@ model Item {
   name          String
   description   String
   scoreModifier Int
+  price         Int
   users         ItemUser[]
 
   @@map("items")
