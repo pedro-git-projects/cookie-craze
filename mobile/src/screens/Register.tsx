@@ -31,12 +31,12 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
 
   return (
     <View style={styles.container}>
-    <TextInput
+      <TextInput
         style={styles.input}
         placeholder="usuário"
         onChangeText={(text) => setUsername(text)}
         value={username}
-        keyboardType='default'
+        keyboardType="default"
         autoCapitalize="none"
         autoCorrect={false}
       />

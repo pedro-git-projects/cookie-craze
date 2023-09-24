@@ -41,6 +41,8 @@ const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
         placeholder="Email"
         onChangeText={(text) => setEmail(text)}
         value={email}
+        autoCorrect={false}
+        autoCapitalize='none'
         keyboardType="email-address"
         style={styles.input}
       />
