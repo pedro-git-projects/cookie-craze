@@ -6,7 +6,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 interface LeaderboardEntry {
-  email: string;
+  username: string;
   score: number;
 }
 
@@ -51,7 +51,7 @@ const LeaderboardScreen: React.FC<MainTabsScreenProps<'Leaderboad'>> = ({
   }) => (
     <View style={styles.leaderboardItem}>
       <Text style={styles.rank}>{index + 1}</Text>
-      <Text style={styles.username}>{item.email}</Text>
+      <Text style={styles.username}>{item.username}</Text>
       <Text style={styles.score}>{item.score + '🍪'}</Text>
     </View>
   );

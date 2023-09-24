@@ -8,6 +8,7 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
   navigation,
 }) => {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
@@ -15,6 +16,7 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
     try {
       const res = await axios.post(`http://${ip}:3000/auth/signup`, {
         email,
+        username,
         password,
       });
 
@@ -29,6 +31,15 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
 
   return (
     <View style={styles.container}>
+    <TextInput
+        style={styles.input}
+        placeholder="usuário"
+        onChangeText={(text) => setUsername(text)}
+        value={username}
+        keyboardType='default'
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
       <TextInput
         style={styles.input}
         placeholder="email"
