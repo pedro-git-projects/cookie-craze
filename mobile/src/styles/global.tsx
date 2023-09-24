@@ -12,6 +12,23 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.4,
     resizeMode: 'contain',
   },
+  cookieJar: {
+    alignItems: 'center',
+    backgroundColor: '#fbf1c7',
+    padding: 20,
+    borderRadius: 16,
+  },
+  cookieText: {
+    color: '#458588',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  cookieImage: {
+    width: 120,
+    height: 120,
+    resizeMode: 'contain',
+  },
   input: {
     width: '100%',
     height: 40,
