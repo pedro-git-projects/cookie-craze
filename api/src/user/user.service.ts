@@ -45,4 +45,60 @@ export class UserService {
 
     return deletedUser;
   }
+
+ async purchaseItem(userId: number, itemId: number): Promise<void> {
+    const user = await this.db.user.findUnique({ where: { id: userId } });
+    const item = await this.db.item.findUnique({ where: { id: itemId } });
+    const assignedBy = "admin";
+
+    if (!user || !item) {
+      throw new Error('User or item not found');
+    }
+
+    await this.db.itemUser.create({
+      data: {
+        userId,
+        itemId,
+        assignedBy,
+      },
+    });
+  }
+
+async getUserItems(userId: number) {
+    return this.db.itemUser.findMany({
+        where: {
+            userId,
+        },
+        include: {
+            item: true,
+        }
+    })
+}
+
+
+async getUserItemWithGreatestScoreModifier(userId: number) {
+    const userItems = await this.db.itemUser.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        item: true,
+      },
+    });
+
+    if (userItems.length === 0) {
+      return null; // User has no purchased items
+    }
+
+    // Find the item with the greatest scoreModifier
+    let greatestItem = userItems[0];
+    for (const userItem of userItems) {
+      if (userItem.item.scoreModifier > greatestItem.item.scoreModifier) {
+        greatestItem = userItem;
+      }
+    }
+    return greatestItem;
+  }
+
+
 }
