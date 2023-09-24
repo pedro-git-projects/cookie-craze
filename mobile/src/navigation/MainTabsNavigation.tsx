@@ -9,17 +9,19 @@ const MainTabs = createBottomTabNavigator<MainTabsParamList>();
 export default function MainTabsNavigation() {
   return (
     <NavigationContainer>
-      <MainTabs.Screen
-        name="Game"
-        component={GameScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="gamepad" color={color} size={size} />
-          ),
-          tabBarLabel: 'Jogar',
-        }}
-      />
+      <MainTabs.Navigator initialRouteName="Game">
+        <MainTabs.Screen
+          name="Game"
+          component={GameScreen}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="gamepad" color={color} size={size} />
+            ),
+            tabBarLabel: 'Jogar',
+          }}
+        />
+      </MainTabs.Navigator>
     </NavigationContainer>
   );
 }

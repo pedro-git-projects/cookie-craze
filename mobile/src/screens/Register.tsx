@@ -19,7 +19,7 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
       });
 
       const { access_token } = res.data;
-      console.log(access_token);
+      //console.log(access_token);
       Alert.alert('Success', 'Registered successfully');
       navigation.replace('Login');
     } catch (err) {
