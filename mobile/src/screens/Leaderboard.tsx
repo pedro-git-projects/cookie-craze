@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#fbf1c7',
   },
   leaderboardItem: {
     flexDirection: 'row',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     marginBottom: 8,
-    backgroundColor: 'white',
+    backgroundColor: '#fbf1c7',
     borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: {
