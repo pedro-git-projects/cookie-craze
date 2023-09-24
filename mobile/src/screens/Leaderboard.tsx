@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface LeaderboardEntry {
   email: string;
@@ -19,26 +20,27 @@ const LeaderboardScreen: React.FC<MainTabsScreenProps<'Leaderboad'>> = ({
   const isLoading = leaderboardData.length === 0;
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-  useEffect(() => {
-    if (!accessToken) return;
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://${ip}:3000/users/leaderboard`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        );
-        setLeaderboardData(response.data);
-      } catch (err) {
-        console.error('error fetching leaderboard data:', err);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`http://${ip}:3000/users/leaderboard`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setLeaderboardData(response.data);
+    } catch (err) {
+      console.error('error fetching leaderboard data:', err);
+    }
+  };
 
-    fetchData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (accessToken) {
+        fetchData();
+      }
+      return () => {};
+    }, [accessToken]),
+  );
 
   const renderLeaderboardItems = ({
     item,
