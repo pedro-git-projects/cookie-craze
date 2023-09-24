@@ -46,9 +46,10 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
 
   const renderItem = ({ item }: { item: ItemData }) => (
     <View style={{ padding: 16 }}>
-      <Text>Name: {item.name}</Text>
-      <Text>Description: {item.description}</Text>
-      <Text>Modifier: {item.scoreModifier}</Text>
+      <Text>Nome: {item.name}</Text>
+      <Text>Descrição: {item.description}</Text>
+      <Text>Modificador: {item.scoreModifier + ' por click'}</Text>
+      <Text>Preço: {item.price}</Text>
       <TouchableOpacity onPress={() => handlePurchase(item)}>
         <Text>Purchase</Text>
       </TouchableOpacity>
@@ -60,7 +61,27 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
     setIsModalVisible(true);
   };
 
-  const confirmPuchase = () => setIsModalVisible(false);
+  const confirmPurchase = async () => {
+    setIsModalVisible(false);
+    if (selectedItem) {
+      try {
+        const response = await axios.post(
+          `http://${ip}:3000/users/purchase/`,
+          {
+            itemId: selectedItem.id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        );
+        console.log('comprado com sucesso:', response.data);
+      } catch (err) {
+        console.error('erro comprando item:', err);
+      }
+    }
+  };
 
   return (
     <View>
@@ -80,7 +101,7 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
         >
           <View style={{ backgroundColor: 'white', padding: 20 }}>
             <Text>Confirm purchase of {selectedItem?.name}?</Text>
-            <TouchableOpacity onPress={confirmPuchase}>
+            <TouchableOpacity onPress={confirmPurchase}>
               <Text>Sim</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setIsModalVisible(false)}>
