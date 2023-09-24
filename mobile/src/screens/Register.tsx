@@ -19,7 +19,6 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
       });
 
       const { access_token } = res.data;
-      //console.log(access_token);
       Alert.alert('Success', 'Registered successfully');
       navigation.replace('Login');
     } catch (err) {
@@ -36,6 +35,8 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
         onChangeText={(text) => setEmail(text)}
         value={email}
         keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
       />
 
       <TextInput

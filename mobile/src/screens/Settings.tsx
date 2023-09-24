@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
-import { BackHandler, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  BackHandler,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 interface UserData {
   email: string;
@@ -43,7 +50,7 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
         },
       })
       .then(() => {
-          BackHandler.exitApp();
+        BackHandler.exitApp();
       })
       .catch((err) => {
         console.log('error deleting user ', err);
