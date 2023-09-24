@@ -14,19 +14,19 @@ const styles = StyleSheet.create({
   },
   cookieJar: {
     alignItems: 'center',
-    backgroundColor: '#fbf1c7',
+    backgroundColor: '#282828',
     padding: 20,
     borderRadius: 16,
   },
   cookieText: {
-    color: '#458588',
-    fontSize: 24,
+    color: '#fabd2f',
+    fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 16,
   },
   cookieImage: {
-    width: 120,
-    height: 120,
+    width: Dimensions.get('window').width * 0.6,
+    height: Dimensions.get('window').height * 0.4,
     resizeMode: 'contain',
   },
   input: {
