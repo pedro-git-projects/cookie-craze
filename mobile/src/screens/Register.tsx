@@ -21,8 +21,9 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
       const { access_token } = res.data;
       console.log(access_token);
       Alert.alert('Success', 'Registered successfully');
+      navigation.replace('Login');
     } catch (err) {
-        console.log(err)
+      console.log(err);
       Alert.alert('Error', 'Registration failed, please try again');
     }
   };
