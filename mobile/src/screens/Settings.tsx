@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 interface UserData {
-  email: string;
+  username: string;
   score: number;
 }
 
@@ -69,7 +69,7 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
       <View style={styles.modalContainer}>
         {userData ? (
           <>
-            <Text style={styles.headerText}>Usuário: {userData.email}</Text>
+            <Text style={styles.headerText}>Usuário: {userData.username}</Text>
             <Text style={styles.scoreText}>
               🍪 Pontuação: {userData.score} 🍪
             </Text>

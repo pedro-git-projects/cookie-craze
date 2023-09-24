@@ -19,7 +19,7 @@ export class UserService {
     const leaderboard = await this.db.user.findMany({
       where: {},
       select: {
-        email: true,
+        username: true,
         score: true,
       },
       orderBy: {
@@ -44,5 +44,70 @@ export class UserService {
     });
 
     return deletedUser;
+  }
+
+  async purchaseItem(userId: number, itemId: number): Promise<void> {
+    const user = await this.db.user.findUnique({ where: { id: userId } });
+    const item = await this.db.item.findUnique({ where: { id: itemId } });
+    const assignedBy = 'admin';
+
+    if (!user || !item) {
+      throw new Error('User or item not found');
+    }
+
+    const userScore = user.score;
+    const itemPrice = item.price;
+
+    if (userScore >= itemPrice) {
+      const newUserScore = userScore - itemPrice;
+      await this.db.user.update({
+        where: { id: userId },
+        data: { score: newUserScore },
+      });
+
+      await this.db.itemUser.create({
+        data: {
+          userId,
+          itemId,
+          assignedBy,
+        },
+      });
+    } else {
+      throw new Error('Insufficient score to purchase this item');
+    }
+  }
+
+  async getUserItems(userId: number) {
+    return this.db.itemUser.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        item: true,
+      },
+    });
+  }
+
+  async getUserItemWithGreatestScoreModifier(userId: number) {
+    const userItems = await this.db.itemUser.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        item: true,
+      },
+    });
+
+    if (userItems.length === 0) {
+      return null; // User has no purchased items
+    }
+
+    let greatestItem = userItems[0];
+    for (const userItem of userItems) {
+      if (userItem.item.scoreModifier > greatestItem.item.scoreModifier) {
+        greatestItem = userItem;
+      }
+    }
+    return greatestItem;
   }
 }
