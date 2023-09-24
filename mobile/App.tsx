@@ -1,16 +1,10 @@
-import { useEffect, useState } from 'react';
-import SetupNavigation from './src/navigation/SetupNavigation';
+import Main from './src/components/Main';
+import { AuthProvider } from './src/state/AuthProvider';
 
-export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const App: React.FC = () => (
+  <AuthProvider>
+    <Main />
+  </AuthProvider>
+);
 
-  useEffect(() => {
-    // Check if the user is authenticated, and update setIsAuthenticated accordingly
-    // For example, you can use AsyncStorage, a token check, or any other method.
-    // Once you determine authentication, update setIsAuthenticated(true);
-  }, []);
-
-  if (!isAuthenticated) {
-    return <SetupNavigation />;
-  }
-}
+export default App;

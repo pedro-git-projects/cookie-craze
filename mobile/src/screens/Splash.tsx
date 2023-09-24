@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,23 +9,36 @@ import {
 } from 'react-native';
 import { SetupStackParamList } from '../navigation/types';
 import { StackScreenProps } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/global';
 
 type SplashScreenProps = StackScreenProps<SetupStackParamList, 'Splash'>;
 
 const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
+  const [isAsyncStorageCleared, setIsAsyncStorageCleared] = useState(false);
   const logoOpacity = new Animated.Value(0);
 
   useEffect(() => {
-    Animated.timing(logoOpacity, {
-      toValue: 1,
-      duration: 2000,
-      easing: Easing.ease,
-      useNativeDriver: true,
-    }).start(() => {
-      navigation.replace('Login');
-    });
-  }, [navigation, logoOpacity]);
+    // Clear AsyncStorage
+    const clearAsyncStorage = async () => {
+      await AsyncStorage.clear();
+      setIsAsyncStorageCleared(true);
+    };
+
+    clearAsyncStorage();
+
+    // Animate the logo and navigate after clearing AsyncStorage
+    if (isAsyncStorageCleared) {
+      Animated.timing(logoOpacity, {
+        toValue: 1,
+        duration: 2000,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }).start(() => {
+        navigation.replace('Login');
+      });
+    }
+  }, [navigation, logoOpacity, isAsyncStorageCleared]);
 
   return (
     <View style={styles.container}>

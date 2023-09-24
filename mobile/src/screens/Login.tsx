@@ -3,19 +3,34 @@ import { Image, TextInput, Text, TouchableOpacity, View } from 'react-native';
 import NavigableText from '../components/NavigableText';
 import styles from '../styles/global';
 import { SetupStackScreenProps } from '../navigation/types';
+import { useAuth } from '../state/AuthProvider';
+import axios from 'axios';
 
 const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
   navigation,
 }) => {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
+  const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-  const handleLogin = () => {
-    // TODO: handle login
-    setLoginFailed(true);
-    console.log('Email:', email);
-    console.log('Password:', password);
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`http:${ip}:3000/auth/signin`, {
+        email,
+        password,
+      });
+
+      const { access_token } = response.data;
+      login(access_token);
+      setEmail('');
+      setPassword('');
+      setLoginFailed(false);
+    } catch (error) {
+      console.error('Login failed:', error);
+      setLoginFailed(true);
+    }
   };
 
   return (
