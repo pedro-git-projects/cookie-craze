@@ -19,7 +19,7 @@ export class UserService {
     const leaderboard = await this.db.user.findMany({
       where: {},
       select: {
-        email: true,
+        username: true,
         score: true,
       },
       orderBy: {

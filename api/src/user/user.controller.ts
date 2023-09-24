@@ -20,7 +20,7 @@ export class UserController {
 
   @Get('self')
   getMe(@GetUser() user: User) {
-    const { id, createdat, updatedAt, ...rest } = user;
+    const { id, createdAt, updatedAt, ...rest } = user;
     return rest;
   }
 

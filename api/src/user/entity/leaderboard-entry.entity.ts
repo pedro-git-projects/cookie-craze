@@ -1,4 +1,4 @@
 export class LeaderboardEntry {
-  email: string;
+  username: string;
   score: number;
 }
