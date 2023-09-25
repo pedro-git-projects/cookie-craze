@@ -24,6 +24,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 16,
   },
+  cookieMultiplierText: {
+    color: '#d3869b',
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
   cookieImage: {
     width: Dimensions.get('window').width * 0.6,
     height: Dimensions.get('window').height * 0.4,

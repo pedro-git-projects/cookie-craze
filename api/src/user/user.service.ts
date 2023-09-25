@@ -55,6 +55,17 @@ export class UserService {
       throw new Error('User or item not found');
     }
 
+  const existingPurchase = await this.db.itemUser.findFirst({
+    where: {
+      userId,
+      itemId,
+    },
+  });
+
+  if (existingPurchase) {
+    throw new Error('User has already purchased this item');
+  }
+
     const userScore = user.score;
     const itemPrice = item.price;
 

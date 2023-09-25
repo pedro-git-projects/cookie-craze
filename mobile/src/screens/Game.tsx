@@ -6,10 +6,10 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 import styles from '../styles/global';
 import { useFocusEffect } from '@react-navigation/native';
 
-// TODO: fetch greatest modifier and apply it to the click updater
 const GameScreen: React.FC<MainTabsScreenProps<'Game'>> = ({ navigation }) => {
   const { accessToken } = useAuth();
   const [score, setScore] = useState<number | null>(null);
+  const [scoreModifier, setScoreModifier] = useState<number | null>(null);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
   const saveScore = (newScore: number) => {
@@ -47,18 +47,38 @@ const GameScreen: React.FC<MainTabsScreenProps<'Game'>> = ({ navigation }) => {
       });
   };
 
+  const fetchItemData = async () => {
+    try {
+      const itemResponse = await axios.get(
+        `http://${ip}:3000/users/items/greatest`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+
+      if (itemResponse.data.item && itemResponse.data.item.scoreModifier) {
+        setScoreModifier(itemResponse.data.item.scoreModifier);
+      }
+    } catch (err) {
+      console.error('Error fetching item data:', err);
+    }
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (accessToken) {
         fetchData();
+        fetchItemData();
       }
       return () => {};
     }, [accessToken]),
   );
 
   const handleClick = (x: number) => {
-    if (score !== null) {
-      const newScore = score + x;
+    if (score !== null && scoreModifier !== null) {
+      const newScore = score + x * scoreModifier;
       setScore(newScore);
       saveScore(newScore);
     }
@@ -69,6 +89,11 @@ const GameScreen: React.FC<MainTabsScreenProps<'Game'>> = ({ navigation }) => {
       {score !== null ? (
         <View style={styles.cookieJar}>
           <Text style={styles.cookieText}>Cookies: {score}</Text>
+          {scoreModifier !== null && (
+            <Text style={styles.cookieMultiplierText}>
+              Multiplicador: {scoreModifier}
+            </Text>
+          )}
           <TouchableOpacity onPress={() => handleClick(1)}>
             <Image
               source={require('../../assets/clicker.png')}

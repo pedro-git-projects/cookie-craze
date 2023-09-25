@@ -61,7 +61,6 @@ export class UserController {
 
     try {
       await this.userService.purchaseItem(user.id, itemId);
-      // Purchase successful
       return {
         message: 'Purchase successful',
         status: HttpStatus.OK,
@@ -69,7 +68,7 @@ export class UserController {
     } catch (error) {
       return {
         message: error.message,
-        status: HttpStatus.BAD_REQUEST,
+        status: HttpStatus.OK,
       };
     }
   }
