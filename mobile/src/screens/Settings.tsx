@@ -1,22 +1,12 @@
 import { useCallback, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
-import axios from 'axios';
-import {
-  BackHandler,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import scoreSavedEmitter from '../state/ScoreSavedEmitter';
-
-interface UserData {
-  username: string;
-  score: number;
-}
+import { UserData } from '../types/user.d';
+import { fetchUserData } from '../api/fetch';
+import { deleteUser } from '../api/delete';
 
 const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
   navigation,
@@ -26,26 +16,13 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-  const fetchData = async () => {
-    axios
-      .get(`http://${ip}:3000/users/self`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        setUserData(response.data);
-      })
-      .catch((err) => {
-        console.log('error fetching user data ', err);
-      });
-  };
-
   useFocusEffect(
     useCallback(() => {
       if (accessToken) {
-        scoreSavedEmitter.on('score-saved', () => fetchData());
-        fetchData();
+        scoreSavedEmitter.on('score-saved', () =>
+          fetchUserData(accessToken, ip, setUserData),
+        );
+        fetchUserData(accessToken, ip, setUserData);
       }
       return () => {};
     }, [accessToken]),
@@ -54,21 +31,8 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
   const handleDeleteUser = () => setShowConfirmationModal(true);
 
   const handleConfirmDelete = () => {
-    axios
-      .delete(`http://${ip}:3000/users/self`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then(() => {
-        BackHandler.exitApp();
-      })
-      .catch((err) => {
-        console.log('error deleting user ', err);
-      })
-      .finally(() => {
-        setShowConfirmationModal(false);
-      });
+    deleteUser(accessToken, ip);
+    setShowConfirmationModal(false);
   };
 
   const handleCloseModal = () => {

@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
-import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   FlatList,
@@ -13,19 +12,9 @@ import {
 import ConfirmationModal from '../components/ConfirmationModal';
 import MessageModal from '../components/MessageModal';
 import scoreSavedEmitter from '../state/ScoreSavedEmitter';
-
-interface ItemData {
-  id: number;
-  name: string;
-  description: string;
-  scoreModifier: number;
-  price: number;
-}
-
-interface UserData {
-  username: string;
-  score: number;
-}
+import { ItemData } from '../types/item.d';
+import { UserData } from '../types/user.d';
+import { fetchItemData, fetchUserData, purchaseItem } from '../api/fetch';
 
 const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
   navigation,
@@ -39,42 +28,14 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
   const [userData, setUserData] = useState<UserData | null>(null);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-  const fetchItemData = async () => {
-    try {
-      const response = await axios.get(`http://${ip}:3000/store/items`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setData(response.data);
-    } catch (err) {
-      console.error('error fetching leaderboard data:', err);
-    }
-  };
-
-  const fetchData = async () => {
-    axios
-      .get(`http://${ip}:3000/users/self`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        setUserData(response.data);
-      })
-      .catch((err) => {
-        console.log('error fetching user data ', err);
-      });
-  };
-
   useFocusEffect(
     useCallback(() => {
       scoreSavedEmitter.on('score-saved', () => {
-        fetchData();
+        fetchUserData(accessToken, ip, setUserData);
       });
       if (accessToken) {
-        fetchItemData();
-        fetchData();
+        fetchItemData(accessToken, ip, setData);
+        fetchUserData(accessToken, ip, setUserData);
       }
       return () => {};
     }, [accessToken]),
@@ -109,30 +70,14 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
 
   const confirmPurchase = async () => {
     setIsModalVisible(false);
-    if (selectedItem) {
-      try {
-        const response = await axios.post(
-          `http://${ip}:3000/users/purchase/`,
-          {
-            itemId: selectedItem.id,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        );
-        if (
-          response.data.message === 'Insufficient score to purchase this item'
-        ) {
-          setIsFailModalVisible(true);
-        } else {
-          setIsSuccessModalVisible(true);
-        }
-      } catch (err) {
-        console.error('erro comprando item:', err);
-      }
-    }
+    if (selectedItem)
+      purchaseItem(
+        accessToken,
+        ip,
+        selectedItem,
+        setIsFailModalVisible,
+        setIsSuccessModalVisible,
+      );
   };
 
   return (

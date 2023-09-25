@@ -1,15 +1,11 @@
 import { useCallback, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
-import axios from 'axios';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import scoreSavedEmitter from '../state/ScoreSavedEmitter';
-
-interface LeaderboardEntry {
-  username: string;
-  score: number;
-}
+import LeaderboardEntry from '../types/leaderboard.d';
+import { fetchLeaderboard } from '../api/fetch';
 
 const LeaderboardScreen: React.FC<MainTabsScreenProps<'Leaderboad'>> = ({
   navigation,
@@ -21,26 +17,13 @@ const LeaderboardScreen: React.FC<MainTabsScreenProps<'Leaderboad'>> = ({
   const isLoading = leaderboardData.length === 0;
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`http://${ip}:3000/users/leaderboard`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setLeaderboardData(response.data);
-    } catch (err) {
-      console.error('error fetching leaderboard data:', err);
-    }
-  };
-
   useFocusEffect(
     useCallback(() => {
       if (accessToken) {
         scoreSavedEmitter.on('score-saved', () => {
-          fetchData();
+          fetchLeaderboard(accessToken, ip, setLeaderboardData);
         });
-        fetchData();
+        fetchLeaderboard(accessToken, ip, setLeaderboardData);
       }
       return () => {};
     }, [accessToken]),
@@ -60,9 +43,7 @@ const LeaderboardScreen: React.FC<MainTabsScreenProps<'Leaderboad'>> = ({
     </View>
   );
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+  if (isLoading) return <Text>Loading...</Text>;
   return (
     <>
       <View style={styles.container}>
