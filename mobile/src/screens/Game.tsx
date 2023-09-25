@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import styles from '../styles/global';
 
+// TODO: fetch greatest modifier and apply it to the click updater
 const GameScreen: React.FC<MainTabsScreenProps<'Game'>> = ({ navigation }) => {
   const { accessToken } = useAuth();
   const [score, setScore] = useState<number | null>(null);
