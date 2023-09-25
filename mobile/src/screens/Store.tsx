@@ -112,6 +112,7 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
         />
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -128,13 +129,13 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
                   style={styles.cancelButton}
                   onPress={() => setIsModalVisible(false)}
                 >
-                  <Text style={styles.confirmationText}>Não</Text>
+                  <Text style={styles.buttonText}>Não</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.confirmButton}
                   onPress={confirmPurchase}
                 >
-                  <Text style={styles.confirmationText}>Sim</Text>
+                  <Text style={styles.buttonText}>Sim</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonText: {
-    color: 'white',
+    color: '#282828',
     fontWeight: 'bold',
   },
 });
