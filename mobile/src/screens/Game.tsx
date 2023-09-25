@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import styles from '../styles/global';
+import { useFocusEffect } from '@react-navigation/native';
 
 // TODO: fetch greatest modifier and apply it to the click updater
 const GameScreen: React.FC<MainTabsScreenProps<'Game'>> = ({ navigation }) => {
@@ -31,8 +32,7 @@ const GameScreen: React.FC<MainTabsScreenProps<'Game'>> = ({ navigation }) => {
       });
   };
 
-  useEffect(() => {
-    if (!accessToken) return;
+  const fetchData = async () => {
     axios
       .get(`http://${ip}:3000/users/self`, {
         headers: {
@@ -45,7 +45,16 @@ const GameScreen: React.FC<MainTabsScreenProps<'Game'>> = ({ navigation }) => {
       .catch((err) => {
         console.error('error fetching initial score:', err);
       });
-  }, [accessToken]);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (accessToken) {
+        fetchData();
+      }
+      return () => {};
+    }, [accessToken]),
+  );
 
   const handleClick = (x: number) => {
     if (score !== null) {
