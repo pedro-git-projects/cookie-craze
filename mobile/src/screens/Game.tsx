@@ -81,6 +81,10 @@ const GameScreen: React.FC<MainTabsScreenProps<'Game'>> = ({ navigation }) => {
       const newScore = score + x * scoreModifier;
       setScore(newScore);
       saveScore(newScore);
+    } else if (score !== null) {
+      const newScore = score + x;
+      setScore(newScore);
+      saveScore(newScore);
     }
   };
 
