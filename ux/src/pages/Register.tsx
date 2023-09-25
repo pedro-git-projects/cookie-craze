@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom';
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async () => {
     try {
       const response = await axios.post('http://localhost:3000/auth/signup', {
         email,
+        username,
         password,
       });
 
@@ -27,6 +29,13 @@ const Register: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
+      <input
+        type="text"
+        placeholder="Usuário"
+        className="w-64 h-10 p-2 border rounded mb-4"
+        onChange={(e) => setUsername(e.target.value)}
+        value={username}
+      />
       <input
         type="text"
         placeholder="Email"

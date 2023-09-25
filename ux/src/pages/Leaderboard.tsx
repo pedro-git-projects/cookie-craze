@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../state/AuthProvider';
 
 interface LeaderboardEntry {
-  email: string;
+  username: string;
   score: number;
 }
 
@@ -58,7 +58,7 @@ const Leaderboard: React.FC = () => {
             >
               <div>
                 <span className="text-lg font-semibold">
-                  {'Usuário: ' + entry.email}
+                  {'Usuário: ' + entry.username}
                 </span>
                 <br />
                 <span className="text-lg font-semibold">
