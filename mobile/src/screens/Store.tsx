@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   FlatList,
-  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,

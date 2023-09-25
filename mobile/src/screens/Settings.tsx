@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface UserData {
   username: string;
@@ -24,8 +25,7 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-  useEffect(() => {
-    if (!accessToken) return;
+  const fetchData = async () => {
     axios
       .get(`http://${ip}:3000/users/self`, {
         headers: {
@@ -38,7 +38,16 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
       .catch((err) => {
         console.log('error fetching user data ', err);
       });
-  }, []);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (accessToken) {
+        fetchData();
+      }
+      return () => {};
+    }, [accessToken]),
+  );
 
   const handleDeleteUser = () => setShowConfirmationModal(true);
 
