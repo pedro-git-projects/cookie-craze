@@ -58,7 +58,7 @@ const Game: React.FC = () => {
         }
       },
       10 * 60 * 1000,
-    ); 
+    );
 
     // Save the score before navigating away or quitting the page
     const handleBeforeUnload = () => {
@@ -79,7 +79,7 @@ const Game: React.FC = () => {
     if (score !== null) {
       const newScore = score + x;
       setScore(newScore);
-      saveScore(newScore); 
+      saveScore(newScore);
     }
   };
 

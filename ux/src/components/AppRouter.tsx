@@ -5,6 +5,7 @@ import Register from '../pages/Register';
 import Game from '../pages/Game';
 import Leaderboard from '../pages/Leaderboard';
 import Settings from '../pages/Settings';
+import Store from '../pages/Store';
 
 const AppRouter = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const AppRouter = createBrowserRouter([
   {
     path: '/game',
     element: <Game />,
+  },
+  {
+    path: '/store',
+    element: <Store />,
   },
   {
     path: '/leaderboard',
