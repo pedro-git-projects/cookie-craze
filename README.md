@@ -50,6 +50,14 @@ O servidor do Cookie Craze é construído usando NestJS. Para iniciá-lo, siga a
    ```bash
    npm install
    ```
+3. Crie um arquivo .env com a string do banco de dados e o segredo do jwt:
+
+```bash
+DATABASE_URL="postgresql://username:password@host:port/database_name?schema=schema_name"
+
+
+JWT_SECRET="Muito Sigiloso"
+```
 
 4. Suba o docker com o banco de dados:
 
