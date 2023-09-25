@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ConfirmationModal from '../components/ConfirmationModal';
+import MessageModal from '../components/MessageModal';
 
 interface ItemData {
   id: number;
@@ -20,13 +22,14 @@ interface ItemData {
   price: number;
 }
 
-// TODO: display insufficient funds message
 const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
   navigation,
 }) => {
   const { accessToken } = useAuth();
   const [data, setData] = useState<ItemData[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isFailModalVisible, setIsFailModalVisible] = useState(false);
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
@@ -94,7 +97,13 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
             },
           },
         );
-        console.log('comprado com sucesso:', response.data);
+        if (
+          response.data.message === 'Insufficient score to purchase this item'
+        ) {
+          setIsFailModalVisible(true);
+        } else {
+          setIsSuccessModalVisible(true);
+        }
       } catch (err) {
         console.error('erro comprando item:', err);
       }
@@ -112,35 +121,26 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
         />
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isModalVisible}
-          onRequestClose={() => setIsModalVisible(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.confirmationText}>
-                Realmente deseja comprar {selectedItem?.name}?
-              </Text>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.cancelButton}
-                  onPress={() => setIsModalVisible(false)}
-                >
-                  <Text style={styles.buttonText}>Não</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.confirmButton}
-                  onPress={confirmPurchase}
-                >
-                  <Text style={styles.buttonText}>Sim</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+        <ConfirmationModal
+          mainMessage={'Realmente deseja comprar ' + selectedItem?.name}
+          btn1Msg="Não"
+          btn2Msg="Sim"
+          visibility={isModalVisible}
+          onPressBtn1={() => setIsModalVisible(false)}
+          onPressBtn2={confirmPurchase}
+        />
+        <MessageModal
+          mainMessage="Saldo insuficente!"
+          btn1Msg="Ok"
+          onPressBtn1={() => setIsFailModalVisible(false)}
+          visibility={isFailModalVisible}
+        />
+        <MessageModal
+          mainMessage="Comprado com sucesso!"
+          btn1Msg="Ok"
+          onPressBtn1={() => setIsSuccessModalVisible(false)}
+          visibility={isSuccessModalVisible}
+        />
       </View>
     </>
   );
@@ -162,17 +162,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fbf1c7',
-  },
-  modalContainer: {
-    backgroundColor: '#fbf1c7',
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    alignItems: 'center',
   },
   storeItem: {
     flexDirection: 'row',
