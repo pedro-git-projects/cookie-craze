@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import scoreSavedEmitter from '../state/ScoreSavedEmitter';
 
 interface UserData {
   username: string;
@@ -43,6 +44,7 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
   useFocusEffect(
     useCallback(() => {
       if (accessToken) {
+        scoreSavedEmitter.on('score-saved', () => fetchData());
         fetchData();
       }
       return () => {};

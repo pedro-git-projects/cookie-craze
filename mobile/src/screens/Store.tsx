@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import ConfirmationModal from '../components/ConfirmationModal';
 import MessageModal from '../components/MessageModal';
+import scoreSavedEmitter from '../state/ScoreSavedEmitter';
 
 interface ItemData {
   id: number;
@@ -19,6 +20,11 @@ interface ItemData {
   description: string;
   scoreModifier: number;
   price: number;
+}
+
+interface UserData {
+  username: string;
+  score: number;
 }
 
 const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
@@ -30,9 +36,10 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
   const [isFailModalVisible, setIsFailModalVisible] = useState(false);
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-  const fetchData = async () => {
+  const fetchItemData = async () => {
     try {
       const response = await axios.get(`http://${ip}:3000/store/items`, {
         headers: {
@@ -45,9 +52,28 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
     }
   };
 
+  const fetchData = async () => {
+    axios
+      .get(`http://${ip}:3000/users/self`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        setUserData(response.data);
+      })
+      .catch((err) => {
+        console.log('error fetching user data ', err);
+      });
+  };
+
   useFocusEffect(
     useCallback(() => {
+      scoreSavedEmitter.on('score-saved', () => {
+        fetchData();
+      });
       if (accessToken) {
+        fetchItemData();
         fetchData();
       }
       return () => {};
@@ -113,6 +139,7 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
     <>
       <View style={styles.container}>
         <Text style={styles.titleText}>🛒 Loja 🍪</Text>
+        <Text style={styles.titleText}>Saldo: {userData?.score}</Text>
       </View>
       <View style={styles.flatList}>
         <FlatList

@@ -4,6 +4,7 @@ import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import scoreSavedEmitter from '../state/ScoreSavedEmitter';
 
 interface LeaderboardEntry {
   username: string;
@@ -36,6 +37,9 @@ const LeaderboardScreen: React.FC<MainTabsScreenProps<'Leaderboad'>> = ({
   useFocusEffect(
     useCallback(() => {
       if (accessToken) {
+        scoreSavedEmitter.on('score-saved', () => {
+          fetchData();
+        });
         fetchData();
       }
       return () => {};
