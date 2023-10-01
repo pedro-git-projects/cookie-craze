@@ -15,12 +15,15 @@ const ForgotScreen: React.FC<SetupStackScreenProps<'Forgot'>> = ({
 
   return (
     <View style={styles.container}>
-      <Text> Recuperar Senha</Text>
+      <Text style={styles.cookieText}> Recuperar Senha</Text>
+      <Image
+        source={require('../../assets/padlock.png')}
+        style={styles.forgotLogo}
+      />
 
-      <Image source={require('../../assets/icon.png')} style={styles.logo} />
-
-      <Text>Digite o seu endereço de email para recuperar a senha.</Text>
-
+      <Text style={styles.forgotPasswordText}>
+        Digite o seu endereço de email para recuperar a senha.
+      </Text>
       <TextInput
         style={styles.input}
         placeholder="Email"

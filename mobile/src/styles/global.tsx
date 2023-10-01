@@ -12,6 +12,11 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.4,
     resizeMode: 'contain',
   },
+  forgotLogo: {
+    width: Dimensions.get('window').width * 0.25,
+    height: Dimensions.get('window').height * 0.25,
+    resizeMode: 'contain',
+  },
   cookieJar: {
     alignItems: 'center',
     backgroundColor: '#282828',
@@ -60,6 +65,7 @@ const styles = StyleSheet.create({
   forgotPasswordText: {
     marginVertical: 8,
     textAlign: 'center',
+    color: '#fbf1c7',
   },
   createAccountText: {
     marginTop: 16,

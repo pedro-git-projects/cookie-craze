@@ -31,6 +31,7 @@ const RegisterScreen: React.FC<SetupStackScreenProps<'Register'>> = ({
 
   return (
     <View style={styles.container}>
+      <Text style={styles.cookieText}> Criar Conta</Text>
       <TextInput
         style={styles.input}
         placeholder="usuário"
