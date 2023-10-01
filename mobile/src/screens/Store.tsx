@@ -81,24 +81,21 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
   );
 
   const renderItem = ({ item }: { item: ItemData }) => (
-    <View
-      style={[
-        { padding: 16, borderRadius: 8, marginBottom: 16 },
-        { backgroundColor: '#fbf1c7' },
-      ]}
-    >
-      <Text style={styles.headerText}>Nome: {item.name}</Text>
-      <Text style={styles.scoreText}>Descrição: {item.description}</Text>
-      <Text style={styles.scoreText}>
-        Modificador: {item.scoreModifier + ' por click'}
-      </Text>
-      <Text style={styles.scoreText}>Preço: {item.price}</Text>
-      <TouchableOpacity
-        style={styles.purchaseButton}
-        onPress={() => handlePurchase(item)}
-      >
-        <Text style={styles.purchaseButtonText}>Comprar</Text>
-      </TouchableOpacity>
+    <View style={itemStyle.storeItemStyles}>
+      <View style={itemStyle.cardContent}>
+        <Text style={itemStyle.headerText}>Nome: {item.name}</Text>
+        <Text style={itemStyle.scoreText}>Descrição: {item.description}</Text>
+        <Text style={itemStyle.scoreText}>
+          Modificador: {item.scoreModifier + ' por click'}
+        </Text>
+        <Text style={itemStyle.scoreText}>Preço: {item.price}</Text>
+        <TouchableOpacity
+          style={itemStyle.purchaseButton}
+          onPress={() => handlePurchase(item)}
+        >
+          <Text style={itemStyle.purchaseButtonText}>Comprar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -172,6 +169,38 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
   );
 };
 
+const itemStyle = StyleSheet.create({
+  storeItemStyles: {
+    flexDirection: 'column',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  cardContent: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#fbf1c7',
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  scoreText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  purchaseButton: {
+    backgroundColor: '#8ec07c',
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  purchaseButtonText: {
+    color: '#282828',
+    fontWeight: 'bold',
+  },
+});
 const styles = StyleSheet.create({
   container: {
     flex: 2,
@@ -207,16 +236,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
   },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  scoreText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
-
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
@@ -237,17 +256,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  purchaseButton: {
-    backgroundColor: '#8ec07c',
-    marginTop: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  purchaseButtonText: {
-    color: '#282828',
-    fontWeight: 'bold',
-  },
+
   cancelButton: {
     backgroundColor: '#928374',
     paddingVertical: 10,
@@ -266,4 +275,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 export default StoreScreen;
