@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
@@ -133,6 +133,7 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
           setIsFailModalVisible(true);
         } else {
           setIsSuccessModalVisible(true);
+          fetchData();
         }
       } catch (err) {
         console.error('erro comprando item:', err);

@@ -55,15 +55,15 @@ export class UserController {
   async purchaseItem(
     @GetUser() user: User,
     @Body() purchaseDto: PurchaseDto,
-  ): Promise<any> {
+  ): Promise<User | { message: any; status: HttpStatus }> {
     const { itemId } = purchaseDto;
 
     try {
-      await this.userService.purchaseItem(user.id, itemId);
-      return {
-        message: 'Purchase successful',
-        status: HttpStatus.OK,
-      };
+      const purchasedUser = await this.userService.purchaseItem(
+        user.id,
+        itemId,
+      );
+      return purchasedUser;
     } catch (error) {
       return {
         message: error.message,
@@ -77,12 +77,10 @@ export class UserController {
     return this.userService.getUserItems(user.id);
   }
 
-
   @Get('self/items')
   async getUserItemsWithId(@GetUser() user: User) {
     return this.userService.getUserWithItemIds(user.id);
   }
-
 
   @Get('items/greatest')
   async getUserGreatestItem(@GetUser() user: User) {

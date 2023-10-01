@@ -46,7 +46,7 @@ export class UserService {
     return deletedUser;
   }
 
-  async purchaseItem(userId: number, itemId: number): Promise<void> {
+  async purchaseItem(userId: number, itemId: number): Promise<User> {
     const user = await this.db.user.findUnique({ where: { id: userId } });
     const item = await this.db.item.findUnique({ where: { id: itemId } });
     const assignedBy = 'admin';
@@ -55,16 +55,16 @@ export class UserService {
       throw new Error('User or item not found');
     }
 
-  const existingPurchase = await this.db.itemUser.findFirst({
-    where: {
-      userId,
-      itemId,
-    },
-  });
+    const existingPurchase = await this.db.itemUser.findFirst({
+      where: {
+        userId,
+        itemId,
+      },
+    });
 
-  if (existingPurchase) {
-    throw new Error('User has already purchased this item');
-  }
+    if (existingPurchase) {
+      throw new Error('User has already purchased this item');
+    }
 
     const userScore = user.score;
     const itemPrice = item.price;
@@ -83,6 +83,9 @@ export class UserService {
           assignedBy,
         },
       });
+
+      // Return the updated user data.
+      return user;
     } else {
       throw new Error('Insufficient score to purchase this item');
     }
@@ -122,7 +125,9 @@ export class UserService {
     return greatestItem;
   }
 
- async getUserWithItemIds(userId: number): Promise<{ user: User; itemIds: number[] }> {
+  async getUserWithItemIds(
+    userId: number,
+  ): Promise<{ user: User; itemIds: number[] }> {
     const user = await this.db.user.findUnique({ where: { id: userId } });
     const itemUsers = await this.db.itemUser.findMany({
       where: {
