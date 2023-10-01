@@ -21,9 +21,10 @@ interface UserData {
 const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
   navigation,
 }) => {
-  const { accessToken } = useAuth();
+  const { accessToken, logout } = useAuth();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
   const fetchData = async () => {
@@ -52,6 +53,7 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
   );
 
   const handleDeleteUser = () => setShowConfirmationModal(true);
+  const handleSignOut = () => setShowLogoutModal(true);
 
   const handleConfirmDelete = () => {
     axios
@@ -71,8 +73,16 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
       });
   };
 
+  const handleLogoutCancelled = () => {
+    setShowLogoutModal(false);
+  };
   const handleCloseModal = () => {
     setShowConfirmationModal(false);
+  };
+
+  const handleConfirmLogout = () => {
+    logout();
+    BackHandler.exitApp();
   };
 
   return (
@@ -89,6 +99,13 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
               style={styles.deleteButton}
             >
               <Text style={styles.deleteButtonText}>Deletar Conta</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handleSignOut}
+              style={styles.signOutButton}
+            >
+              <Text style={styles.deleteButtonText}>Sair</Text>
             </TouchableOpacity>
           </>
         ) : (
@@ -115,6 +132,30 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleConfirmDelete}
+                style={styles.confirmButton}
+              >
+                <Text style={styles.buttonText}>Confirmar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal transparent={true} animationType="slide" visible={showLogoutModal}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.confirmationText}>
+              Tem certeza que quer sair?
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                onPress={handleLogoutCancelled}
+                style={styles.cancelButton}
+              >
+                <Text style={styles.buttonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleConfirmLogout}
                 style={styles.confirmButton}
               >
                 <Text style={styles.buttonText}>Confirmar</Text>
@@ -160,6 +201,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
   },
+  signOutButton: {
+    backgroundColor: '#8f3f71',
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+
   deleteButtonText: {
     color: 'white',
     fontWeight: 'bold',
