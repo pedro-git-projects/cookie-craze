@@ -121,4 +121,20 @@ export class UserService {
     }
     return greatestItem;
   }
+
+ async getUserWithItemIds(userId: number): Promise<{ user: User; itemIds: number[] }> {
+    const user = await this.db.user.findUnique({ where: { id: userId } });
+    const itemUsers = await this.db.itemUser.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    const itemIds = itemUsers.map((itemUser) => itemUser.itemId);
+
+    return {
+      user,
+      itemIds,
+    };
+  }
 }

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
@@ -25,6 +25,7 @@ interface ItemData {
 interface UserData {
   username: string;
   score: number;
+  itemIds: number[];
 }
 
 const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
@@ -54,7 +55,7 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
 
   const fetchData = async () => {
     axios
-      .get(`http://${ip}:3000/users/self`, {
+      .get(`http://${ip}:3000/users/self/items`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -80,24 +81,31 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
     }, [accessToken]),
   );
 
-  const renderItem = ({ item }: { item: ItemData }) => (
-    <View style={itemStyle.storeItemStyles}>
-      <View style={itemStyle.cardContent}>
-        <Text style={itemStyle.headerText}>Nome: {item.name}</Text>
-        <Text style={itemStyle.scoreText}>Descrição: {item.description}</Text>
-        <Text style={itemStyle.scoreText}>
-          Modificador: {item.scoreModifier + ' por click'}
-        </Text>
-        <Text style={itemStyle.scoreText}>Preço: {item.price}</Text>
-        <TouchableOpacity
-          style={itemStyle.purchaseButton}
-          onPress={() => handlePurchase(item)}
-        >
-          <Text style={itemStyle.purchaseButtonText}>Comprar</Text>
-        </TouchableOpacity>
+  const renderItem = ({ item }: { item: ItemData }) => {
+    const userItemIds = userData?.itemIds;
+    const isPurchased = userItemIds?.includes(item.id);
+    const buttonText = isPurchased ? 'Comprado' : 'Comprar';
+    const buttonStyle = isPurchased ? { disabled: true } : {};
+    return (
+      <View style={itemStyle.storeItemStyles}>
+        <View style={itemStyle.cardContent}>
+          <Text style={itemStyle.headerText}>Nome: {item.name}</Text>
+          <Text style={itemStyle.scoreText}>Descrição: {item.description}</Text>
+          <Text style={itemStyle.scoreText}>
+            Modificador: {item.scoreModifier + ' por click'}
+          </Text>
+          <Text style={itemStyle.scoreText}>Preço: {item.price}</Text>
+          <TouchableOpacity
+            style={itemStyle.purchaseButton}
+            {...buttonStyle}
+            onPress={() => handlePurchase(item)}
+          >
+            <Text style={itemStyle.purchaseButtonText}>{buttonText}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   const handlePurchase = (item: ItemData) => {
     setSelectedItem(item);

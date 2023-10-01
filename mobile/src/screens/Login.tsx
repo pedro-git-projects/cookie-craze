@@ -28,7 +28,6 @@ const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
       setPassword('');
       setLoginFailed(false);
     } catch (error) {
-      console.error('Login failed:', error);
       setLoginFailed(true);
     }
   };
