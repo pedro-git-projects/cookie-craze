@@ -5,6 +5,7 @@ import styles from '../styles/global';
 import { SetupStackScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
   navigation,
@@ -13,6 +14,8 @@ const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
   const handleLogin = async () => {
@@ -29,7 +32,16 @@ const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
       setLoginFailed(false);
     } catch (error) {
       setLoginFailed(true);
+      setLoginAttempts(loginAttempts + 1);
+      console.log(loginAttempts);
+      if (loginAttempts >= 1) {
+        setModalVisible(true);
+      }
     }
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -50,6 +62,8 @@ const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
         placeholder="Senha"
         onChangeText={(text) => setPassword(text)}
         value={password}
+        autoCorrect={false}
+        autoCapitalize="none"
         secureTextEntry
         style={styles.input}
       />
@@ -69,6 +83,18 @@ const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
           />
         </Text>
       )}
+
+      {modalVisible && (
+        <ConfirmationModal
+          mainMessage="Credenciais incorretas"
+          btn1Msg="Ok"
+          btn2Msg="Criar conta"
+          visibility={modalVisible}
+          onPressBtn1={handleCloseModal}
+          onPressBtn2={() => navigation.navigate('Register')}
+        />
+      )}
+
       <View style={styles.createAccountText}>
         <NavigableText
           text="Não está cadastrado? Criar conta"
