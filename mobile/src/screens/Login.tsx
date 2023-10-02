@@ -33,7 +33,6 @@ const LoginScreen: React.FC<SetupStackScreenProps<'Login'>> = ({
     } catch (error) {
       setLoginFailed(true);
       setLoginAttempts(loginAttempts + 1);
-      console.log(loginAttempts);
       if (loginAttempts >= 1) {
         setModalVisible(true);
       }

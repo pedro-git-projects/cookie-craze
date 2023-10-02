@@ -3,6 +3,7 @@ import { MainTabsScreenProps } from '../navigation/types';
 import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
 import {
+  ActivityIndicator,
   BackHandler,
   Modal,
   StyleSheet,
@@ -87,31 +88,31 @@ const SettingsScreen: React.FC<MainTabsScreenProps<'Settings'>> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.modalContainer}>
-        {userData ? (
-          <>
-            <Text style={styles.headerText}>Usuário: {userData.username}</Text>
-            <Text style={styles.scoreText}>
-              🍪 Pontuação: {userData.score} 🍪
-            </Text>
-            <TouchableOpacity
-              onPress={handleDeleteUser}
-              style={styles.deleteButton}
-            >
-              <Text style={styles.deleteButtonText}>Deletar Conta</Text>
-            </TouchableOpacity>
+      {userData ? (
+        <View style={styles.modalContainer}>
+          <Text style={styles.headerText}>Usuário: {userData.username}</Text>
+          <Text style={styles.scoreText}>
+            🍪 Pontuação: {userData.score} 🍪
+          </Text>
+          <TouchableOpacity
+            onPress={handleDeleteUser}
+            style={styles.deleteButton}
+          >
+            <Text style={styles.deleteButtonText}>Deletar Conta</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={handleSignOut}
-              style={styles.signOutButton}
-            >
-              <Text style={styles.deleteButtonText}>Sair</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <Text>Carregando dados...</Text>
-        )}
-      </View>
+          <TouchableOpacity
+            onPress={handleSignOut}
+            style={styles.signOutButton}
+          >
+            <Text style={styles.deleteButtonText}>Sair</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#d79921" />
+        </View>
+      )}
 
       <Modal
         transparent={true}

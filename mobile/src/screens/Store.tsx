@@ -4,6 +4,7 @@ import { useAuth } from '../state/AuthProvider';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -37,10 +38,12 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
   const [isFailModalVisible, setIsFailModalVisible] = useState(false);
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<ItemData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<UserData | null>(null);
   const ip = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
   const fetchItemData = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(`http://${ip}:3000/store/items`, {
         headers: {
@@ -48,12 +51,20 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
         },
       });
       setData(response.data);
+      setIsLoading(false);
     } catch (err) {
       console.error('error fetching leaderboard data:', err);
+      setIsLoading(false);
     }
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#d79921" />
+      </View>
+    );
   };
 
   const fetchData = async () => {
+    setIsLoading(true);
     axios
       .get(`http://${ip}:3000/users/self/items`, {
         headers: {
@@ -62,10 +73,19 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
       })
       .then((response) => {
         setUserData(response.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log('error fetching user data ', err);
+        setIsLoading(false);
       });
+    if (isLoading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#d79921" />
+        </View>
+      );
+    }
   };
 
   useFocusEffect(
@@ -145,7 +165,8 @@ const StoreScreen: React.FC<MainTabsScreenProps<'Store'>> = ({
     <>
       <View style={styles.container}>
         <Text style={styles.titleText}>🛒 Loja 🍪</Text>
-        <Text style={styles.titleText}>Saldo: {userData?.score}</Text>
+        {/* Let duck typing take care of it, lol */}
+        <Text style={styles.titleText}>Saldo: {userData?.user.score}</Text>
       </View>
       <View style={styles.flatList}>
         <FlatList
